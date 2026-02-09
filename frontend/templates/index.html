@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Heart Disease Prediction</title>
+
+ <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="wrapper">
+<div class="container">
+
+<h2>Heart Disease Prediction</h2>
+
+<form action="/predict" method="post">
+<input type="number" name="age" placeholder="Age" required>
+<input type="number" name="sex" placeholder="Sex" required>
+<input type="number" name="cp" placeholder="Chest Pain Type" required>
+<input type="number" name="trtbps" placeholder="Rest BP" required>
+<input type="number" name="chol" placeholder="Cholesterol" required>
+<input type="number" name="fbs" placeholder="FBS" required>
+<input type="number" name="restecg" placeholder="Rest ECG" required>
+<input type="number" name="thalachh" placeholder="Max Heart Rate" required>
+<input type="number" name="exng" placeholder="Exercise Angina" required>
+<input type="number" step="0.1" name="oldpeak" placeholder="Oldpeak" required>
+<input type="number" name="slp" placeholder="Slope" required>
+<input type="number" name="caa" placeholder="Major Vessels" required>
+<input type="number" name="thall" placeholder="Thalassemia" required>
+
+<select name="model">
+<option value="adaboost">AdaBoost</option>
+<option value="catboost">CatBoost</option>
+<option value="xgboost">XGBoost</option>
+</select>
+
+<button type="submit">Predict</button>
+</form>
+
+</div>
+</div>
+
+{% if prediction_text %}
+<div class="popup">
+<div class="popup-content">
+
+{% if pred_class == 1 %}
+<div class="heart">
+    <div class="half left"></div>
+    <div class="half right"></div>
+</div>
+
+<p style="color:red;">
+⚠️ Heart Disease Detected <br>
+Confidence: {{ confidence }}%
+ <br>
+Risk Level: <b>{{ risk }}</b>
+<br>
+<br>
+Possible risk of heart disease detected. Please consult a cardiologist.
+</p>
+
+{% else %}
+<div class="heart full-heart pulse"></div>
+
+<p style="color:green;">
+❤️ No Heart Disease Detected <br>
+Confidence: {{ confidence }}%
+<br>
+
+Risk Level: <b>{{ risk }}</b>
+<br>
+<br>
+Heart condition appears normal. Maintain a healthy lifestyle.
+</p>
+{% endif %}
+
+<button onclick="this.parentElement.parentElement.style.display='none'">OK</button>
+
+</div>
+</div>
+{% endif %}
+
+</body>
+</html>
