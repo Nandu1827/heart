@@ -158,9 +158,8 @@ app = Flask(
 
 # ---------- Model Directory ----------
 BASE_DIR = os.path.dirname(__file__)
-MODEL_DIR = os.path.join(BASE_DIR, "model")
+MODEL_DIR = "/tmp/model"
 os.makedirs(MODEL_DIR, exist_ok=True)
-
 # ---------- Model File IDs ----------
 files = {
     "adaboost": ("1jUCzeM-KFNaYjgYl2PkfEV_zD2szjAkE", "adaboost.pkl"),
