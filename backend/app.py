@@ -162,25 +162,29 @@ MODEL_DIR = os.path.join(BASE_DIR, "model")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 # Google Drive FILE IDs
+models = {}
+
 files = {
     "adaboost": ("1jUCzeM-KFNaYjgYl2PkfEV_zD2szjAkE", "adaboost.pkl"),
     "catboost": ("1L29LWJFPcg3yUHmxj8ixNNpNjgKlF9jC", "catboost.pkl"),
     "xgboost": ("1toPVI2VjQLSv9HS_ajq9xJIH0ujPOpnz", "xgboost.pkl")
 }
 
-models = {}
+def load_model(model_name):
+    if model_name in models:
+        return models[model_name]
 
-for name, (file_id, filename) in files.items():
+    file_id, filename = files[model_name]
     file_path = os.path.join(MODEL_DIR, filename)
 
-    # Download model if not present
     if not os.path.exists(file_path):
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, file_path, quiet=False, fuzzy=True)
 
-    # Load model safely
     with open(file_path, "rb") as f:
-        models[name] = pickle.load(f)
+        models[model_name] = pickle.load(f)
+
+    return models[model_name]
 
 # ---------- Routes ----------
 @app.route("/")
