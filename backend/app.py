@@ -156,20 +156,21 @@ app = Flask(
     static_folder="../frontend/static"
 )
 
-# ---------- Model Download & Load ----------
+# ---------- Model Directory ----------
 BASE_DIR = os.path.dirname(__file__)
 MODEL_DIR = os.path.join(BASE_DIR, "model")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-# Google Drive FILE IDs
-models = {}
-
+# ---------- Model File IDs ----------
 files = {
     "adaboost": ("1jUCzeM-KFNaYjgYl2PkfEV_zD2szjAkE", "adaboost.pkl"),
     "catboost": ("1L29LWJFPcg3yUHmxj8ixNNpNjgKlF9jC", "catboost.pkl"),
     "xgboost": ("1toPVI2VjQLSv9HS_ajq9xJIH0ujPOpnz", "xgboost.pkl")
 }
 
+models = {}
+
+# ---------- Lazy Load Function ----------
 def load_model(model_name):
     if model_name in models:
         return models[model_name]
@@ -194,7 +195,7 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     model_name = request.form.get("model", "adaboost")
-    model = models[model_name]
+    model = load_model(model_name)   # FIXED
 
     features = [
         float(request.form["age"]),
